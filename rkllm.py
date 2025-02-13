@@ -6,7 +6,6 @@ import time
 
 PROMPT_TEXT_PREFIX = ""
 PROMPT_TEXT_POSTFIX = " <｜Assistant｜>"
-# 使用Tokenizer自动应用模板
 # tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B")
 
 # Set the dynamic library path
