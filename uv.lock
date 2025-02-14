@@ -240,7 +240,7 @@ wheels = [
 ]
 
 [[package]]
-name = "rkllm-3588-openai-like-api"
+name = "rkllm-3588-server-api"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RKLLM Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #007BFF; /* Nền xanh */
+            color: white; /* Chữ trắng */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        #chat-container {
+            width: 100%;
+            max-width: 800px; /* Chat box rộng hơn */
+            background-color: #ffffff; /* Nền trắng cho khung chat */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        #chat-header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF; /* Màu xanh cho tiêu đề */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #chat-log {
+            height: 400px; /* Chiều cao lớn hơn */
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9; /* Nền nhạt cho khung chat log */
+            border-radius: 5px;
+        }
+
+        #chat-log p {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+
+        #chat-log p strong {
+            font-weight: bold;
+        }
+
+        #chat-log p:nth-child(odd) {
+            background-color: #e1f5fe; /* Màu cho câu hỏi của người dùng */
+            color: #000; /* Chữ đen */
+            align-self: flex-start;
+        }
+
+        #chat-log p:nth-child(even) {
+            background-color: #007BFF; /* Màu cho câu trả lời của RKLLM */
+            color: white; /* Chữ trắng */
+            align-self: flex-end;
+        }
+
+        #user-input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+        }
+
+        #send-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF; /* Nút màu xanh */
+            color: white; /* Chữ trắng */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #send-btn:hover {
+            background-color: #0056b3; /* Màu xanh đậm khi hover */
+        }
+
+        #footer {
+            font-size: 12px;
+            color: #666; /* Màu chữ nhạt */
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            #chat-container {
+                width: 90%;
+                padding: 10px;
+            }
+
+            #chat-log {
+                height: 300px; /* Chiều cao nhỏ hơn cho mobile */
+            }
+
+            #chat-header {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">RKLLM Chat trên Orange Pi 5</div>
+        <div id="chat-log"></div>
+        <input type="text" id="user-input" placeholder="Điền câu hỏi của bạn vào đây...">
+        <button id="send-btn">Gửi đi</button>
+        <div id="footer">AI chatbot chạy trên bo mạch Orange Pi 5 RK3588</div>
+    </div>
+
+    <script>
+        document.getElementById('send-btn').addEventListener('click', function() {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.trim() === "") return;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const chatLog = document.getElementById('chat-log');
+                chatLog.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+                chatLog.innerHTML += `<p><strong>RKLLM:</strong> ${data.response}</p>`;
+                document.getElementById('user-input').value = '';
+                chatLog.scrollTop = chatLog.scrollHeight; // Tự động cuộn xuống dưới cùng
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('send-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>
