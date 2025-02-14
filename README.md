@@ -5,7 +5,7 @@ rkllm server code compatible with the OpenAI API format.
 ## Usage
 
 ```bash
-git clone [https://github.com/huonwe/rkllm_openai_like_api.git](https://github.com/thanhtantran/rkllm_server_api)
+git clone https://github.com/thanhtantran/rkllm_server_api
 cd rkllm_server_api
 ```
 
