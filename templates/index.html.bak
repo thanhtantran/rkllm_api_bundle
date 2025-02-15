@@ -90,9 +90,8 @@
             width: 100%;
         }
 
-        #send-btn:disabled {
-            background-color: #cccccc; /* Màu xám khi nút bị vô hiệu hóa */
-            cursor: not-allowed;
+        #send-btn:hover {
+            background-color: #0056b3; /* Màu xanh đậm khi hover */
         }
 
         #footer {
@@ -121,29 +120,17 @@
 </head>
 <body>
     <div id="chat-container">
-        <div id="chat-header">RKLLM Chat</div>
+        <div id="chat-header">RKLLM Chat trên Orange Pi 5</div>
         <div id="chat-log"></div>
-        <input type="text" id="user-input" placeholder="Type your message here...">
-        <button id="send-btn">Send</button>
+        <input type="text" id="user-input" placeholder="Điền câu hỏi của bạn vào đây...">
+        <button id="send-btn">Gửi đi</button>
         <div id="footer">AI chatbot chạy trên bo mạch Orange Pi 5 RK3588</div>
     </div>
 
     <script>
-        document.getElementById('send-btn').addEventListener('click', sendMessage);
-        document.getElementById('user-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
-
-        function sendMessage() {
+        document.getElementById('send-btn').addEventListener('click', function() {
             const userInput = document.getElementById('user-input').value;
             if (userInput.trim() === "") return;
-
-            const sendBtn = document.getElementById('send-btn');
-            sendBtn.disabled = true; // Vô hiệu hóa nút Send
-            sendBtn.textContent = 'Sending...'; // Thay đổi text nút Send
 
             fetch('/chat', {
                 method: 'POST',
@@ -152,12 +139,7 @@
                 },
                 body: JSON.stringify({ message: userInput })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 const chatLog = document.getElementById('chat-log');
                 chatLog.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
@@ -165,15 +147,15 @@
                 document.getElementById('user-input').value = '';
                 chatLog.scrollTop = chatLog.scrollHeight; // Tự động cuộn xuống dưới cùng
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while sending the message. Please try again.');
-            })
-            .finally(() => {
-                sendBtn.disabled = false; // Kích hoạt lại nút Send
-                sendBtn.textContent = 'Send'; // Đổi lại text nút Send
-            });
-        }
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                document.getElementById('send-btn').click();
+            }
+        });
     </script>
 </body>
 </html>

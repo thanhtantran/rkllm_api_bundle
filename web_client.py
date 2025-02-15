@@ -33,29 +33,37 @@ def chat():
     }
 
     data = {
-        "model": 'your_model_deploy_with_RKLLM_Server',
+        "model": 'deepseek-coder-7b-instruct-v1.5-rk3588-w8a8-opt-0-hybrid-ratio-0.0.rkllm',
         "messages": [{"role": "user", "content": user_message}],
         "stream": is_streaming
     }
 
-    responses = session.post(server_url, json=data, headers=headers, stream=is_streaming, verify=False)
+    try:
+        responses = session.post(server_url, json=data, headers=headers, stream=is_streaming, verify=False, timeout=10)  # Them timeout
 
-    if not is_streaming:
-        if responses.status_code == 200:
-            response_data = json.loads(responses.text)
-            return jsonify({"response": response_data["choices"][-1]["message"]["content"]})
+        if not is_streaming:
+            if responses.status_code == 200:
+                response_data = json.loads(responses.text)
+                return jsonify({"response": response_data["choices"][-1]["message"]["content"]})
+            else:
+                return jsonify({"error": responses.text}), 500
         else:
-            return jsonify({"error": responses.text})
-    else:
-        if responses.status_code == 200:
-            response_text = ""
-            for line in responses.iter_lines():
-                if line:
-                    line = json.loads(line.decode('utf-8').split("data: ")[1])
-                    response_text += line["choices"][-1]["delta"]["content"]
-            return jsonify({"response": response_text})
-        else:
-            return jsonify({"error": responses.text})
+            if responses.status_code == 200:
+                response_text = ""
+                for line in responses.iter_lines():
+                    if line:
+                        line = json.loads(line.decode('utf-8').split("data: ")[1])
+                        response_text += line["choices"][-1]["delta"]["content"]
+                return jsonify({"response": response_text})
+            else:
+                return jsonify({"error": responses.text}), 500
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+    except json.JSONDecodeError as e:
+        return jsonify({"error": "Invalid JSON response from server"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

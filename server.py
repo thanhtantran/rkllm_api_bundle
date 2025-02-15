@@ -28,7 +28,7 @@ def receive_message():
 
     # If the server is in a blocking state, return a specific response.
     if is_blocking or get_global_state()==0:
-        resp = make_llm_response("⚠ RKLLM_Server 正忙碌! 请稍后再尝试.")
+        resp = make_llm_response("⚠ RKLLM_Server is busy! Please try again later.")
         return jsonify(resp), 200
     
     lock.acquire()
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     sys.stdout.flush()
     global_model = args.rkllm_model_path
     rkllm_model = RKLLM(global_model, args.lora_model_path, args.prompt_cache_path)
-    print("RKLLM Model has been initialized successfully！")
+    print("RKLLM Model has been initialized successfully")
     print("==============================")
     sys.stdout.flush()
         
