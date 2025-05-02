@@ -1,6 +1,8 @@
 ## Introduction
 
 rkllm server code compatible with the OpenAI API format.
+cli client to connect with the rkllm server
+web client to connect with rkllm server
 
 ## Usage
 
