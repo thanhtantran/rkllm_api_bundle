@@ -19,7 +19,7 @@ is_blocking = False
 # Create a global variable to save the model path.
 global_model = ""
 # Create a function to receive data sent by the user using a request
-@app.route('/rkllm_chat/v1/chat/completions', methods=['POST'])
+@app.route('/v1/chat/completions', methods=['POST'])
 @cross_origin()
 def receive_message():
     # Link global variables to retrieve the output information from the callback function
@@ -96,7 +96,7 @@ def receive_message():
         lock.release()
         is_blocking = False
 
-@app.route("/rkllm_chat/v1/models", methods=['GET'])
+@app.route("/v1/models", methods=['GET'])
 @cross_origin()
 def show_models():
     global global_model

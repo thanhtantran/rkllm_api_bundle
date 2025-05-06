@@ -5,7 +5,7 @@ import json
 app = Flask(__name__)
 
 # Set the address of the Server.
-server_url = 'http://127.0.0.1:8080/rkllm_chat/v1/chat/completions'
+server_url = 'http://127.0.0.1:8080/v1/chat/completions'
 # Set whether to enable streaming mode.
 is_streaming = True
 
