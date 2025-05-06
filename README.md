@@ -58,7 +58,7 @@ Do not use the rkllm local running model to automatically generate titles, tags,
 
 ## Model
 
-Here is the 1.5b distilled version of the deepseek-r1 rkllm model, you can download it if needed: https://vietnodes.com/public/591964fbe3d1
+Here is the 1.5b distilled version of the deepseek-r1 rkllm model, you can download it if needed: [deepseek-r1-1.5b-w8a8.rkllm](https://vietnodes.com/wl/?id=hM3MAJxBIC3YRotr8lpNwl0ugKoOOFlH)
 
 ## Credits
 
