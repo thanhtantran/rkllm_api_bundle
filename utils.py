@@ -105,4 +105,40 @@ def apply_chat_template(messages):
         conversation = ""
         for msg in messages:
             if msg['role'] == 'system':
-                conversation += f"
+                conversation += f"<|im_start|>system\n{msg['content']}<|im_end|>\n"
+            elif msg['role'] == 'user':
+                conversation += f"<|im_start|>user\n{msg['content']}<|im_end|>\n"
+            elif msg['role'] == "assistant":
+                conversation += f"<|im_start|>assistant\n{msg['content']}<|im_end|>\n"
+        
+        # Add the final assistant prompt
+        if messages and messages[-1]['role'] != 'assistant':
+            conversation += "<|im_start|>assistant\n"
+        
+        return conversation
+
+
+def make_llm_response(llm_output: str) -> dict:
+    # Define the structure for the returned response.
+    rkllm_responses = {
+        "id": "rkllm_chat",
+        "object": "rkllm_chat",
+        "created": None,
+        "choices": [],
+        "usage": {
+        "prompt_tokens": None,
+        "completion_tokens": None,
+        "total_tokens": None
+        }
+    }
+    rkllm_responses["choices"].append(
+        {"index": 0,
+        "message": {
+            "role": "assistant",
+            "content": llm_output,
+        },
+        "logprobs": None,
+        "finish_reason": "stop"
+        }
+    )
+    return rkllm_responses
