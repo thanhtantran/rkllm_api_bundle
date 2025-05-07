@@ -131,4 +131,15 @@ def apply_chat_template(messages, model_path=None):
         conversation = ""
         for msg in messages:
             if msg['role'] == 'system':
-                conversation += f"
+                conversation += f"<s>[INST] <<SYS>>\n{msg['content']}\n<</SYS>>\n\n"
+            elif msg['role'] == 'user':
+                if conversation:
+                    conversation += f"{msg['content']} [/INST]"
+                else:
+                    conversation += f"<s>[INST] {msg['content']} [/INST]"
+            elif msg['role'] == "assistant":
+                conversation += f" {msg['content']}</s>"
+                if msg != messages[-1]:  # If not the last message
+                    conversation += f"<s>[INST] "
+        
+        return conversation
