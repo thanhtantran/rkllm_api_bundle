@@ -143,3 +143,36 @@ def apply_chat_template(messages, model_path=None):
                     conversation += f"<s>[INST] "
         
         return conversation
+
+
+def make_llm_response(text):
+    """
+    Format the LLM response in OpenAI API compatible format.
+    
+    Args:
+        text (str): The text response from the LLM model
+        
+    Returns:
+        dict: A dictionary formatted like OpenAI API response
+    """
+    return {
+        "id": "chatcmpl-123",
+        "object": "chat.completion",
+        "created": 1677858242,
+        "model": "rkllm-model",
+        "usage": {
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0
+        },
+        "choices": [
+            {
+                "message": {
+                    "role": "assistant",
+                    "content": text
+                },
+                "finish_reason": "stop",
+                "index": 0
+            }
+        ]
+    }
