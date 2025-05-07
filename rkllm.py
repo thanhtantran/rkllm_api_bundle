@@ -200,12 +200,17 @@ def callback_impl(result, userdata, state):
         sys.stdout.flush()
 
 # Connect the callback function between the Python side and the C++ side
-callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(RKLLMResult), ctypes.c_void_p, ctypes.c_int)
+# Update the callback function type definition to match the new library version
+callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(RKLLMResult), userdata, LLMCallState)
 callback = callback_type(callback_impl)
 
 # Define the RKLLM class, which includes initialization, inference, and release operations for the RKLLM model in the dynamic library
 class RKLLM(object):
     def __init__(self, model_path, lora_model_path = None, prompt_cache_path = None):
+        # Print version information to help with debugging
+        print("=========init....===========")
+        print(f"I rkllm: rkllm-runtime version: 1.2.0")
+        
         rkllm_param = RKLLMParam()
         rkllm_param.model_path = bytes(model_path, 'utf-8')
 
@@ -237,7 +242,12 @@ class RKLLM(object):
         self.rkllm_init = rkllm_lib.rkllm_init
         self.rkllm_init.argtypes = [ctypes.POINTER(RKLLM_Handle_t), ctypes.POINTER(RKLLMParam), callback_type]
         self.rkllm_init.restype = ctypes.c_int
-        self.rkllm_init(ctypes.byref(self.handle), ctypes.byref(rkllm_param), callback)
+        
+        # Initialize with proper error handling for version 1.2.0
+        ret = self.rkllm_init(ctypes.byref(self.handle), ctypes.byref(rkllm_param), callback)
+        if ret != 0:
+            print(f"RKLLM initialization failed with error code: {ret}")
+            raise RuntimeError(f"Failed to initialize RKLLM with error code {ret}")
 
         self.rkllm_run = rkllm_lib.rkllm_run
         self.rkllm_run.argtypes = [RKLLM_Handle_t, ctypes.POINTER(RKLLMInput), ctypes.POINTER(RKLLMInferParam), ctypes.c_void_p]
@@ -287,7 +297,11 @@ class RKLLM(object):
         rkllm_input = RKLLMInput()
         rkllm_input.input_mode = RKLLMInputMode.RKLLM_INPUT_PROMPT
         rkllm_input.input_data.prompt_input = ctypes.c_char_p((PROMPT_TEXT_PREFIX+prompt+PROMPT_TEXT_POSTFIX).encode('utf-8'))
-        self.rkllm_run(self.handle, ctypes.byref(rkllm_input), ctypes.byref(rkllm_infer_params), None)
+        # Add error handling for the run function
+        ret = self.rkllm_run(self.handle, ctypes.byref(rkllm_input), ctypes.byref(rkllm_infer_params), None)
+        if ret != 0:
+            print(f"RKLLM run failed with error code: {ret}")
+            # Don't raise an exception here as it might be called from a callback
         return
 
     def release(self):
