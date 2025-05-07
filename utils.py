@@ -1,13 +1,39 @@
 import re
 import os
 
-def apply_chat_template(messages):
+def apply_chat_template(messages, model_path=None):
     """
     A flexible chat template function that supports various models.
     The format is determined by the model name set in the global_model variable.
     """
-    from server import global_model
-    model_name = os.path.basename(global_model).lower()
+    # Avoid circular import by not importing global_model directly
+    # Instead, use the model_path parameter if provided
+    if model_path is None:
+        # Default to DeepSeek format if no model path is provided
+        begin_of_sentence = "<｜begin of sentence｜>"
+        end_of_sentence = "<｜end of sentence｜>"
+        user_position = "<｜User｜>"
+        assistant_position = "<｜Assistant｜>"
+        think_content = re.compile('<think>.*</think>')
+
+        sentence = ""
+        sentence += begin_of_sentence
+        for msg in messages:
+            if msg['role'] == 'system':
+                sentence += msg['content']
+            if msg['role'] == 'user':
+                sentence += user_position
+                sentence += msg['content']
+            if msg['role'] == "assistant":
+                sentence += assistant_position
+                sentence += msg['content']
+                sentence += end_of_sentence
+
+        sentence = think_content.sub('', sentence)
+        return sentence
+    
+    # If model_path is provided, determine the model type
+    model_name = os.path.basename(model_path).lower()
     
     # DeepSeek models
     if any(name in model_name for name in ["deepseek", "qwen"]):
@@ -105,40 +131,4 @@ def apply_chat_template(messages):
         conversation = ""
         for msg in messages:
             if msg['role'] == 'system':
-                conversation += f"<|im_start|>system\n{msg['content']}<|im_end|>\n"
-            elif msg['role'] == 'user':
-                conversation += f"<|im_start|>user\n{msg['content']}<|im_end|>\n"
-            elif msg['role'] == "assistant":
-                conversation += f"<|im_start|>assistant\n{msg['content']}<|im_end|>\n"
-        
-        # Add the final assistant prompt
-        if messages and messages[-1]['role'] != 'assistant':
-            conversation += "<|im_start|>assistant\n"
-        
-        return conversation
-
-
-def make_llm_response(llm_output: str) -> dict:
-    # Define the structure for the returned response.
-    rkllm_responses = {
-        "id": "rkllm_chat",
-        "object": "rkllm_chat",
-        "created": None,
-        "choices": [],
-        "usage": {
-        "prompt_tokens": None,
-        "completion_tokens": None,
-        "total_tokens": None
-        }
-    }
-    rkllm_responses["choices"].append(
-        {"index": 0,
-        "message": {
-            "role": "assistant",
-            "content": llm_output,
-        },
-        "logprobs": None,
-        "finish_reason": "stop"
-        }
-    )
-    return rkllm_responses
+                conversation += f"
