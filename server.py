@@ -109,7 +109,7 @@ def show_models():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--rkllm_model_path', type=str, default="models/deepseek-r1-1.5b-w8a8.rkllm", help='Absolute path of the converted RKLLM model on the Linux board;')
+    parser.add_argument('--rkllm_model_path', type=str, default="models/gemma-3-1b-it-rk3588-w8a8-opt-1-hybrid-ratio-0.0.rkllm", help='Absolute path of the converted RKLLM model on the Linux board;')
     parser.add_argument('--target_platform', type=str, default="rk3588", help='Target platform: e.g., rk3588/rk3576;')
     parser.add_argument('--lora_model_path', type=str, help='Absolute path of the lora_model on the Linux board;')
     parser.add_argument('--prompt_cache_path', type=str, help='Absolute path of the prompt_cache file on the Linux board;')
