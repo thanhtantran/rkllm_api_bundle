@@ -49,7 +49,7 @@ def receive_message():
             # messages.insert(0,{'role':'system','content':'You are a helpful assistant.'})
             messages = data['messages']
             # tokenized = tokenizer.apply_chat_template(messages, tokenize=False)
-            messages_formatted = apply_chat_template(messages)
+            messages_formatted = apply_chat_template(messages, global_model)
             print("messages_formatted: ", messages_formatted)
 
             if not "stream" in data.keys() or data["stream"] == False:
