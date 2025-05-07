@@ -200,8 +200,15 @@ def callback_impl(result, userdata, state):
         sys.stdout.flush()
 
 # Connect the callback function between the Python side and the C++ side
-# Update the callback function type definition to match the new library version
-callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(RKLLMResult), userdata, LLMCallState)
+# Update the callback function type definition
+# The userdata parameter is likely the issue, so we need to change its type
+# For version 1.2.0, it might need to be a void pointer (c_void_p) instead of a specific type
+
+# Replace:
+# callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(RKLLMResult), userdata, LLMCallState)
+
+# With:
+callback_type = ctypes.CFUNCTYPE(None, ctypes.POINTER(RKLLMResult), ctypes.c_void_p, ctypes.c_int)
 callback = callback_type(callback_impl)
 
 # Define the RKLLM class, which includes initialization, inference, and release operations for the RKLLM model in the dynamic library
