@@ -81,6 +81,8 @@ Hoặc bạn có thể chạy giao diện web qua cổng 5000 (http://IP:5000)
 uv run web_client.py
 ```
 
+![rkllm-chat-demo](https://github.com/user-attachments/assets/58a1a749-ed3d-4fcf-aa46-96d18e7bd847)
+
 ## Ghi chú
 
 Do hạn chế về hiệu năng, server chỉ có thể xử lý một cuộc trò chuyện tại một thời điểm. Nếu có cuộc trò chuyện đang diễn ra mà chưa hoàn tất, server sẽ không chấp nhận bất kỳ cuộc trò chuyện nào khác.
