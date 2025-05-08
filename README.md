@@ -83,6 +83,9 @@ Or you can use run a web interface via port 5000 (http://IP:5000)
 uv run web_client.py
 ```
 
+![rkllm-chat-demo](https://github.com/user-attachments/assets/58a1a749-ed3d-4fcf-aa46-96d18e7bd847)
+
+
 ## Notes
 
 Due to performance limitations, the server can only process one conversation at a time. If there is an ongoing conversation that has not been completed, the server will not accept any other conversations.
