@@ -49,7 +49,10 @@ uv run server.py
 
 - By default, the target platform is rk3588, and the model path is models/gemma-3-1b-it-rk3588-w8a8-opt-1-hybrid-ratio-0.0.rkllm, and the listening port is 8080.
 This model is free to download in my Hugging Face repo https://huggingface.co/thanhtantran/gemma-3-1b-it-rk3588-1.2.0
-- You can manually specify parameters, such as `uv run server.py --rkllm_model_path=path/to/model.rkllm --target_platform=rk3588/rk3576 --port=xxxx`
+- You can manually specify parameters, such as 
+```bash
+uv run server.py --rkllm_model_path=path/to/model.rkllm --target_platform=rk3588/rk3576 --port=xxxx
+```
 - You can let the server run on a screen by using command
 ```bash
 screen -S rkllm-server uv run server.py

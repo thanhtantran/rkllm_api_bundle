@@ -1,7 +1,7 @@
 
 ## Giới thiệu
 
-Đoạn mã này đã được cập nhật để sử dụng với thư viện `librkllmrt.so` phiên bản 1.2.0 - Nó **không thể hoạt động với thư viện cũ** `librkllmrt.so` phiên bản 1.4.1, và đoạn mã cũ cũng không thể hoạt động với phiên bản 1.2.0.
+Code này đã được cập nhật để sử dụng với thư viện `librkllmrt.so` phiên bản 1.2.0 - Nó **không thể hoạt động với thư viện cũ** `librkllmrt.so` phiên bản 1.4.1, và code cũ cũng không thể hoạt động với phiên bản 1.2.0. Hãy chắc chắn bạn đang định dùng phiên bản nào.
 
 Vui lòng đảm bảo rằng bo mạch RK3588/RK3576 của bạn có driver RKNPU ít nhất là phiên bản 0.9.8  
 ```bash
@@ -49,8 +49,10 @@ uv run server.py
 - Mặc định, nền tảng mục tiêu là `rk3588`, đường dẫn mô hình là `models/gemma-3-1b-it-rk3588-w8a8-opt-1-hybrid-ratio-0.0.rkllm`, và cổng lắng nghe là `8080`.  
 Mô hình này có thể tải miễn phí tại Hugging Face repo của tôi: https://huggingface.co/thanhtantran/gemma-3-1b-it-rk3588-1.2.0  
 - Bạn có thể chỉ định tham số thủ công, ví dụ:  
-  `uv run server.py --rkllm_model_path=duong/dan/toi/model.rkllm --target_platform=rk3588/rk3576 --port=xxxx`  
-- Bạn có thể để server chạy trên màn hình bằng lệnh:  
+```bash
+uv run server.py --rkllm_model_path=duong/dan/toi/model.rkllm --target_platform=rk3588/rk3576 --port=xxxx
+```  
+- Bạn có thể để server chạy nền bằng ứng dụng `screen` trên linux bằng lệnh:  
 ```bash
 screen -S rkllm-server uv run server.py
 ```
