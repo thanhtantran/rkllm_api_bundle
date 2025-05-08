@@ -1,6 +1,6 @@
 [project]
 name = "rkllm-3588-server-api"
-version = "0.1.0"
+version = "0.2.0"
 description = "RKLLM Server API"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -9,4 +9,7 @@ dependencies = [
     "flask-cors>=5.0.0",
     "requests>=2.32.3",
     "rknn-toolkit-lite2>=2.3.0",
+    "markdown==3.8",
+    "bleach==6.2.0",
+    "webencodings==0.5.1",
 ]
