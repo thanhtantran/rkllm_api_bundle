@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This code has been updated to use with the lib librkllmrt.so version 1.2.0 - It cannot work with the old lib librkllmrt.so version 1.4.1, and the old code also cannot with with version 1.2.0
+This source code has been updated to use with the lib librkllmrt.so version 1.2.0 - It cannot work with the old lib librkllmrt.so version 1.4.1, and the old code also cannot with with version 1.2.0
 
 Please ensure that your RK3588/RK3576 board has RKNPU driver at least 0.9.8
 ```bash
@@ -10,7 +10,7 @@ admin@orangepi5b:~/rkllm_api_bundle$ sudo cat /sys/kernel/debug/rknpu/version
 RKNPU driver: v0.9.8
 ```
 
-This app has 3 functions:
+This source code has 3 functions:
 
 - RKLLM server code compatible with the OpenAI API format, API endpoint port 8080
 - CLI client to connect with rkllm server, question and answer in command line
@@ -53,7 +53,7 @@ This model is free to download in my Hugging Face repo https://huggingface.co/th
 ```bash
 uv run server.py --rkllm_model_path=path/to/model.rkllm --target_platform=rk3588/rk3576 --port=xxxx
 ```
-- You can let the server run on a screen by using command
+- You can let the server run in background by using command screen as bellow
 ```bash
 screen -S rkllm-server uv run server.py
 ```
