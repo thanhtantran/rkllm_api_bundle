@@ -59,7 +59,7 @@ screen -S rkllm-server uv run server.py
 ```
 
 Then, you can access this server through `http://your.ip:8080/v1/chat/completions`
-Please note that the server only implemented POST `/v1/chat/completions` and GET `/v1/models`, NOTE all of the functions as OpenAI
+Please note that the server only implemented POST `/v1/chat/completions` and GET `/v1/models`, **NOT** all of the functions as OpenAI
 
 You can use CLI client to test:
 
