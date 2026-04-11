@@ -27,8 +27,40 @@ body {
     font-size: 20px;
     font-weight: bold;
     color: #007BFF;
-    text-align: center;
     border-bottom: 1px solid #e6e6e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#model-selector-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+#model-selector-container label {
+    color: #606770;
+}
+
+#model-select {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background-color: white;
+    cursor: pointer;
+    max-width: 300px;
+}
+
+#model-select:focus {
+    border-color: #0084ff;
+    box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.2);
 }
 
 #chat-log {
@@ -214,5 +246,19 @@ body {
     
     .message {
         max-width: 85%;
+    }
+    
+    #chat-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    #model-selector-container {
+        width: 100%;
+    }
+    
+    #model-select {
+        flex: 1;
+        max-width: 100%;
     }
 }

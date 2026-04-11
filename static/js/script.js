@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendBtn = document.getElementById('send-btn');
     const userInput = document.getElementById('user-input');
     const chatLog = document.getElementById('chat-log');
+    const modelSelect = document.getElementById('model-select');
+
+    // Load available models
+    loadModels();
 
     // Event listeners
     sendBtn.addEventListener('click', sendMessage);
@@ -15,9 +19,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Focus on input when page loads
     userInput.focus();
 
+    function loadModels() {
+        fetch('/models')
+            .then(response => response.json())
+            .then(data => {
+                modelSelect.innerHTML = '';
+                if (data.data && data.data.length > 0) {
+                    data.data.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model.id;
+                        option.textContent = model.id;
+                        modelSelect.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No models available';
+                    modelSelect.appendChild(option);
+                }
+            })
+            .catch(error => {
+                console.error('Error loading models:', error);
+                modelSelect.innerHTML = '<option value="">Error loading models</option>';
+            });
+    }
+
     function sendMessage() {
         const message = userInput.value.trim();
         if (message === "") return;
+
+        const selectedModel = modelSelect.value;
+        if (!selectedModel) {
+            addMessage('Please select a model first.', 'error');
+            return;
+        }
 
         // Disable button and show loading state
         sendBtn.disabled = true;
@@ -35,7 +70,10 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify({ 
+                message: message,
+                model: selectedModel
+            })
         })
         .then(response => {
             if (!response.ok) {

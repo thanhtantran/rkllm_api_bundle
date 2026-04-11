@@ -8,7 +8,9 @@ import html
 app = Flask(__name__)
 
 # Set the address of the Server.
-server_url = 'http://127.0.0.1:8080/v1/chat/completions'
+base_url = 'http://127.0.0.1:8080'
+server_url = f'{base_url}/v1/chat/completions'
+models_url = f'{base_url}/v1/models'
 # Set whether to enable streaming mode.
 is_streaming = True
 
@@ -88,9 +90,22 @@ def format_markdown(text):
 def index():
     return render_template('index.html')
 
+@app.route('/models', methods=['GET'])
+def get_models():
+    """Fetch available models from the RKLLM server"""
+    try:
+        response = session.get(models_url, timeout=5)
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return jsonify({"error": "Failed to fetch models"}), 500
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/chat', methods=['POST'])
 def chat():
     user_message = request.json['message']
+    selected_model = request.json.get('model', default_model)
     
     if user_message == "exit":
         return jsonify({"response": "The RKLLM Server is stopping......", "html": "<p>The RKLLM Server is stopping......</p>"})
@@ -101,7 +116,7 @@ def chat():
     }
 
     data = {
-        "model": default_model,
+        "model": selected_model,
         "messages": [{"role": "user", "content": user_message}],
         "stream": is_streaming
     }

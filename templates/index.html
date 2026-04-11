@@ -8,7 +8,15 @@
 </head>
 <body>
     <div id="chat-container">
-        <div id="chat-header">RKLLM Chat</div>
+        <div id="chat-header">
+            <div>RKLLM Chat</div>
+            <div id="model-selector-container">
+                <label for="model-select">Model:</label>
+                <select id="model-select">
+                    <option value="">Loading...</option>
+                </select>
+            </div>
+        </div>
         <div id="chat-log"></div>
         <div id="input-area">
             <input type="text" id="user-input" placeholder="Type your message here...">
